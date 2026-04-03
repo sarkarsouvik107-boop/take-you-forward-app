@@ -1,22 +1,29 @@
-// Configuration file
-const config = {
-  development: {
-    port: process.env.PORT || 5000,
-    nodeEnv: 'development',
-    dbUrl: process.env.DB_URL || 'mongodb://localhost:27017/take-you-forward'
-  },
-  production: {
-    port: process.env.PORT || 8000,
-    nodeEnv: 'production',
-    dbUrl: process.env.DB_URL
-  },
-  testing: {
-    port: 5001,
-    nodeEnv: 'testing',
-    dbUrl: 'mongodb://localhost:27017/take-you-forward-test'
+// Middleware functions
+
+// Authentication middleware (example)
+const authMiddleware = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: 'No token provided'
+    });
   }
+  
+  // Add token validation logic here
+  next();
 };
 
-const environment = process.env.NODE_ENV || 'development';
+// Validation middleware (example)
+const validateInput = (schema) => {
+  return (req, res, next) => {
+    // Add validation logic here
+    next();
+  };
+};
 
-module.exports = config[environment];
+module.exports = {
+  authMiddleware,
+  validateInput
+};
